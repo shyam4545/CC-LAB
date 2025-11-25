@@ -1,0 +1,177 @@
+⭐ Launching a Website on AWS (2 Methods)
+
+1️⃣ Static Website → AWS S3 (Best for HTML/CSS/JS)
+2️⃣ Dynamic Website → EC2 (Node.js, PHP, Django, etc.)
+
+Dono explain kar raha hoon.
+
+🟢 METHOD 1: Launch STATIC Website using S3 (HTML/CSS/JavaScript)
+✔ Step 1: Create S3 Bucket
+
+Login AWS
+
+Open S3
+
+Click Create Bucket
+
+Bucket Name:
+my-website-shyam
+
+Region: Choose nearest
+
+Uncheck "Block all public access"
+
+Create bucket
+
+✔ Step 2: Upload Your Website Files
+
+Click on bucket → Upload
+
+Upload:
+
+index.html
+
+style.css
+
+images/
+
+✔ Step 3: Enable Static Website Hosting
+
+S3 Bucket → Properties
+
+Scroll → Static Website Hosting
+
+Enable
+
+Enter:
+
+Index document: index.html
+
+Save
+
+✔ Step 4: Make Files Public
+
+Select all files
+
+Actions → Make public
+
+Or attach this bucket policy:
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::my-website-shyam/*"
+    }
+  ]
+}
+
+✔ Step 5: Get Website Link
+
+Properties → Static Hosting URL
+
+Example:
+
+http://my-website-shyam.s3-website-us-east-1.amazonaws.com
+
+
+🎉 Your website is LIVE!
+
+🟠 METHOD 2: Launch DYNAMIC Website using EC2 (Node.js, React, PHP, Django, etc.)
+⭐ Step 1: Launch EC2 Instance
+
+EC2 Dashboard → Launch Instance
+
+Name: my-web-server
+
+OS:
+✔ Ubuntu 22.04
+
+Instance Type:
+✔ t2.micro (Free tier)
+
+Create Key Pair
+
+Configure Security Group:
+
+Type	Port	Purpose
+SSH	22	Server Login
+HTTP	80	Website Access
+HTTPS	443	SSL
+
+Launch
+
+⭐ Step 2: Connect to EC2 (SSH)
+Windows PowerShell:
+ssh -i "mykey.pem" ubuntu@<Public-IP>
+
+⭐ Step 3: Install Required Software
+For static hosting (Apache):
+sudo apt update -y
+sudo apt install apache2 -y
+
+For Node.js App:
+sudo apt install nodejs npm -y
+
+For Python App:
+sudo apt install python3-pip -y
+
+For PHP:
+sudo apt install apache2 php libapache2-mod-php -y
+
+⭐ Step 4: Upload Your Website Files
+Option 1: SCP (simple)
+scp -i "mykey.pem" index.html ubuntu@<Public-IP>:/var/www/html/
+
+Option 2: Directly edit inside EC2:
+sudo nano /var/www/html/index.html
+
+⭐ Step 5: Start & Enable Web Server
+Apache:
+sudo systemctl start apache2
+sudo systemctl enable apache2
+
+Node.js:
+node app.js
+
+⭐ Step 6: Open Website in Browser
+http://<EC2-Public-IP>
+
+
+🎉 Your Dynamic Website is LIVE on AWS!
+
+💡 BONUS: Make Website Public with Domain Name (Optional)
+1. Buy domain from:
+
+AWS Route53
+
+GoDaddy
+
+Namecheap
+
+2. Add DNS record:
+
+Type: A record
+Value: EC2 Public IP
+
+Example:
+
+www.mywebsite.com  →  54.201.123.45
+
+🎯 Final Summary (Exam Ready Notes)
+Method	Best For	Service Used
+AWS S3	Static Websites (HTML/CSS/JS)	S3 Bucket + Static Hosting
+AWS EC2	Dynamic Websites (Node/PHP/Python)	EC2 + Web Server
+
+Steps:
+
+Launch instance/bucket
+
+Upload website files
+
+Configure security/permissions
+
+Test with browser URL
